@@ -13,3 +13,5 @@ class ExtractionErgebnis(BaseModel):
     daten: dict
     fehler: list[str]
     retry_count: int
+    seiten_erfolgreich: list[int]   # ← neu: z.B. [0, 1, 3]
+    seiten_fehlgeschlagen: list[int] # ← neu: z.B. [2, 4]
