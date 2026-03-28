@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "datum": {
+            "type": "string",
+            "description": "Datum im Format DD.MM.YYYY"
+        }
+    },
+    "required": ["name", "datum"]
+}
