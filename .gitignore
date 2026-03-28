@@ -2,5 +2,5 @@
 __pycache__/
 *.pyc
 output.png
-sample.pdf
+sample_pdfs/
 .venv
