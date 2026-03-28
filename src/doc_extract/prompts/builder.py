@@ -14,6 +14,7 @@ Du verarbeitest Seite {seite_num + 1} von {gesamt_seiten}.
 {fehler_hinweis}
 Extrahiere die Daten aus dem folgenden Text.
 Beachte die Beschreibungen der Felder genau.
+Felder mit "Zusammenfassung" oder "summary" sollst du selbst generieren.
 Gib NUR die Werte zurück - kein Schema, keine Typen, keine Erklärungen.
 
 Beispiel Antwort:

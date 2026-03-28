@@ -9,6 +9,7 @@ from src.doc_extract.prompts.builder import baue_prompt
 from src.doc_extract.inference.vllm_client import sende_anfrage
 from src.doc_extract.models import ExtractionErgebnis
 from src.doc_extract.postprocess.validation import validiere_ergebnis
+from src.doc_extract.config import DEFAULT_SCHEMA_PATH
 
 def extrahiere_json(text: str) -> dict:
     text = text.strip()
@@ -19,6 +20,8 @@ def extrahiere_json(text: str) -> dict:
     return json.loads(text[start:ende])
 
 def run_pipeline(pdf_path: Path, schema: dict) -> ExtractionErgebnis:
+    if schema is None:
+        schema = json.loads(DEFAULT_SCHEMA_PATH.read_text())
     request_id = str(uuid.uuid4())
     seiten_info = inspect_pdf(pdf_path)
     gesammelte_daten = {}

@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "properties": {
+        "titel": {
+            "type": "string",
+            "description": "Titel oder Betreff des Dokuments"
+        },
+        "datum": {
+            "type": ["string", "null"],
+            "description": "Datum im Format DD.MM.YYYY"
+        },
+        "absender": {
+            "type": "string",
+            "description": "Name der Person oder Organisation die das Dokument erstellt hat"
+        },
+        "empfaenger": {
+            "type": "string",
+            "description": "Name der Person oder Organisation für die das Dokument bestimmt ist"
+        },
+        "zusammenfassung": {
+            "type": "string",
+            "description": "Kurze Zusammenfassung des Inhalts in 1-2 Sätzen"
+        }
+    },
+    "required": ["datum", "absender"]
+}
