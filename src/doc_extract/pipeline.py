@@ -8,6 +8,7 @@ from src.doc_extract.pdf.render import render_seite
 from src.doc_extract.prompts.builder import baue_prompt
 from src.doc_extract.inference.vllm_client import sende_anfrage
 from src.doc_extract.models import ExtractionErgebnis
+from src.doc_extract.postprocess.validation import validiere_ergebnis
 
 def run_pipeline(pdf_path: Path, schema: dict) -> ExtractionErgebnis:
     request_id = str(uuid.uuid4())
@@ -43,10 +44,13 @@ def run_pipeline(pdf_path: Path, schema: dict) -> ExtractionErgebnis:
             fehler.append(f"Seite {seite_num}: {str(e)}")
             seiten_fehlgeschlagen.append(seite_num)
 
+    valid, validierungs_fehler = validiere_ergebnis(gesammelte_daten, schema)
+    fehler.extend(validierungs_fehler)
+
     return ExtractionErgebnis(
         request_id=request_id,
         seiten=len(seiten_info),
-        valid=len(fehler) == 0,
+        valid=valid,
         daten=gesammelte_daten,
         fehler=fehler,
         retry_count=retry_count,

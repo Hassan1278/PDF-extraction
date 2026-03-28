@@ -5,8 +5,12 @@ schema = {
     "type": "object",
     "properties": {
         "name": {"type": "string"},
-        "datum": {"type": "string"}
-    }
+        "datum": {
+            "type": "string",
+            "description": "Datum im Format DD.MM.YYYY"
+        }
+    },
+    "required": ["name", "datum"]
 }
 
 ergebnis = run_pipeline(Path("sample_pdfs/test.pdf"), schema)
