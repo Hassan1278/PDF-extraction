@@ -10,6 +10,14 @@ from src.doc_extract.inference.vllm_client import sende_anfrage
 from src.doc_extract.models import ExtractionErgebnis
 from src.doc_extract.postprocess.validation import validiere_ergebnis
 
+def extrahiere_json(text: str) -> dict:
+    text = text.strip()
+    start = text.find("{")
+    ende = text.rfind("}") + 1
+    if start == -1 or ende == 0:
+        raise ValueError(f"Kein JSON gefunden in: {text}")
+    return json.loads(text[start:ende])
+
 def run_pipeline(pdf_path: Path, schema: dict) -> ExtractionErgebnis:
     request_id = str(uuid.uuid4())
     seiten_info = inspect_pdf(pdf_path)
@@ -19,30 +27,37 @@ def run_pipeline(pdf_path: Path, schema: dict) -> ExtractionErgebnis:
     seiten_erfolgreich = []
     seiten_fehlgeschlagen = []
 
+    MAX_RETRIES = 3
+
     for seite in seiten_info:
         seite_num = seite["seite"]
         gesamt_seiten = len(seiten_info)
+        versuch = 0
+        letzter_fehler = None
+        while versuch < MAX_RETRIES:
+            try:
+                text = extract_text(pdf_path, seite_num)
 
-        try:
-            text = extract_text(pdf_path, seite_num)
-            bild_bytes = render_seite(pdf_path, seite_num)
-            bild_base64 = base64.b64encode(bild_bytes).decode("utf-8")
+                prompt = baue_prompt(
+                    text=text,
+                    schema=schema,
+                    seite_num=seite_num,
+                    gesamt_seiten=gesamt_seiten,
+                    letzter_fehler=letzter_fehler
+                )
+                antwort = sende_anfrage(prompt)
+                daten = extrahiere_json(antwort)
+                gesammelte_daten.update(daten)
+                seiten_erfolgreich.append(seite_num)
+                retry_count += versuch
+                break
 
-            prompt = baue_prompt(
-                text=text,
-                schema=schema,
-                seite_num=seite_num,
-                gesamt_seiten=gesamt_seiten
-            )
-
-            antwort = sende_anfrage(prompt)
-            daten = json.loads(antwort)
-            gesammelte_daten.update(daten)
-            seiten_erfolgreich.append(seite_num)
-
-        except Exception as e:
-            fehler.append(f"Seite {seite_num}: {str(e)}")
-            seiten_fehlgeschlagen.append(seite_num)
+            except Exception as e:
+                letzter_fehler = str(e)
+                versuch += 1
+                if versuch == MAX_RETRIES:
+                    fehler.append(f"Seite {seite_num} nach {MAX_RETRIES} Versuchen fehlgeschlagen: {letzter_fehler}")
+                    seiten_fehlgeschlagen.append(seite_num)
 
     valid, validierungs_fehler = validiere_ergebnis(gesammelte_daten, schema)
     fehler.extend(validierungs_fehler)
@@ -57,3 +72,4 @@ def run_pipeline(pdf_path: Path, schema: dict) -> ExtractionErgebnis:
         seiten_erfolgreich=seiten_erfolgreich,
         seiten_fehlgeschlagen=seiten_fehlgeschlagen
     )
+    
