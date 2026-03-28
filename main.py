@@ -1,4 +1,13 @@
-from src.doc_extract.inference.vllm_client import sende_anfrage
+from src.doc_extract.pipeline import run_pipeline
+from pathlib import Path
 
-antwort = sende_anfrage("Sag nur: Hallo, ich funktioniere!")
-print(antwort)
+schema = {
+    "type": "object",
+    "properties": {
+        "name": {"type": "string"},
+        "datum": {"type": "string"}
+    }
+}
+
+ergebnis = run_pipeline(Path("sample_pdfs/test.pdf"), schema)
+print(ergebnis)
