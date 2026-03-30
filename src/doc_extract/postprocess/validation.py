@@ -1,9 +1,9 @@
-import json
 from jsonschema import validate, ValidationError
 
-def validiere_ergebnis(daten: dict, schema: dict) -> tuple[bool, list[str]]:
+
+def validate_result(data: dict, schema: dict) -> tuple[bool, list[str]]:
     try:
-        validate(instance=daten, schema=schema)
+        validate(instance=data, schema=schema)
         return True, []
     except ValidationError as e:
         return False, [e.message]

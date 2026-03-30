@@ -1,11 +1,10 @@
 from pathlib import Path
 import fitz
 
-def render_seite(pdf_path: Path, seite_num: int, matrix: float = 2.0) -> bytes:
+
+def render_page(pdf_path: Path, page_num: int, scale: float = 2.0) -> bytes:
     doc = fitz.open(pdf_path)
-    seite = doc[seite_num]
-    
-    m = fitz.Matrix(matrix, matrix)
-    bild = seite.get_pixmap(matrix=m)
-    
-    return bild.tobytes("png")
+    page = doc[page_num]
+    matrix = fitz.Matrix(scale, scale)
+    image = page.get_pixmap(matrix=matrix)
+    return image.tobytes("png")

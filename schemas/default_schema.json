@@ -1,26 +1,26 @@
 {
     "type": "object",
     "properties": {
-        "titel": {
+        "title": {
             "type": "string",
-            "description": "Titel oder Betreff des Dokuments"
+            "description": "Title or subject of the document"
         },
-        "datum": {
+        "date": {
             "type": ["string", "null"],
-            "description": "Datum im Format DD.MM.YYYY"
+            "description": "Date in format DD.MM.YYYY"
         },
-        "absender": {
+        "sender": {
             "type": "string",
-            "description": "Name der Person oder Organisation die das Dokument erstellt hat"
+            "description": "Name of the person or organization that created the document"
         },
-        "empfaenger": {
+        "recipient": {
             "type": "string",
-            "description": "Name der Person oder Organisation für die das Dokument bestimmt ist"
+            "description": "Name of the person or organization the document is addressed to"
         },
-        "zusammenfassung": {
+        "summary": {
             "type": "string",
-            "description": "Kurze Zusammenfassung des Inhalts in 1-2 Sätzen"
+            "description": "Brief summary of the document content in 1-2 sentences"
         }
     },
-    "required": ["datum", "absender"]
+    "required": ["date", "sender"]
 }

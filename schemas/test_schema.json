@@ -2,10 +2,10 @@
     "type": "object",
     "properties": {
         "name": {"type": "string"},
-        "datum": {
+        "date": {
             "type": "string",
-            "description": "Datum im Format DD.MM.YYYY"
+            "description": "Date in format DD.MM.YYYY"
         }
     },
-    "required": ["name", "datum"]
+    "required": ["name", "date"]
 }

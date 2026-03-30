@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/Scripts/python.exe -m pytest -q)",
+      "Bash(while read:*)",
+      "Bash(do echo:*)",
+      "Read(//c/Users/Hassa/Desktop/PDF-extraction/**)",
+      "Bash(done)"
+    ]
+  }
+}

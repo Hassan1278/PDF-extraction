@@ -5,112 +5,108 @@ from pathlib import Path
 
 from src.doc_extract.pdf.inspect import inspect_pdf
 from src.doc_extract.pdf.text_extract import extract_text
-from src.doc_extract.pdf.ocr import ocr_seite
-from src.doc_extract.prompts.builder import baue_prompt
-from src.doc_extract.inference.vllm_client import sende_anfrage
-from src.doc_extract.models import ExtractionErgebnis
-from src.doc_extract.postprocess.validation import validiere_ergebnis
+from src.doc_extract.pdf.ocr import ocr_page
+from src.doc_extract.prompts.builder import build_prompt
+from src.doc_extract.inference.vllm_client import send_request
+from src.doc_extract.models import ExtractionResult
+from src.doc_extract.postprocess.validation import validate_result
 from src.doc_extract.config import DEFAULT_SCHEMA_PATH
 
 logger = logging.getLogger(__name__)
 
 MAX_RETRIES = 3
+MIN_DIGITAL_CHARS = 100
 
 
-def extrahiere_json(text: str) -> dict:
+def extract_json(text: str) -> dict:
     text = text.strip()
     start = text.find("{")
-    ende = text.rfind("}") + 1
-    if start == -1 or ende == 0:
-        raise ValueError(f"Kein JSON gefunden in: {text}")
-    return json.loads(text[start:ende])
+    end = text.rfind("}") + 1
+    if start == -1 or end == 0:
+        raise ValueError(f"No JSON found in: {text}")
+    return json.loads(text[start:end])
 
 
-def _hole_seitentext(pdf_path: Path, seite: dict) -> tuple[str, bool]:
+def _get_page_text(pdf_path: Path, page: dict) -> tuple[str, bool]:
     """
-    Gibt (text, ocr_verwendet) zurück.
-    - text-Seiten:    pdfplumber-Text
-    - bild-Seiten:    OCR-Text
-    - gemischt-Seiten: pdfplumber-Text + OCR-Text kombiniert
-    - leer-Seiten:    leerer String
+    Returns (text, ocr_used).
+    - text pages:   pdfplumber text
+    - image/mixed:  pdfplumber if enough digital text, otherwise OCR
+    - empty pages:  empty string
     """
-    seite_num = seite["seite"]
-    typ = seite["typ"]
+    page_num = page["page"]
+    page_type = page["page_type"]
 
-    if typ == "text":
-        return extract_text(pdf_path, seite_num), False
+    if page_type == "text":
+        return extract_text(pdf_path, page_num), False
 
-    if typ == "bild":
-        ocr_text = ocr_seite(pdf_path, seite_num)
-        logger.debug("Seite %d: OCR lieferte %d Zeichen", seite_num, len(ocr_text))
-        return ocr_text, True
+    if page_type in ["image", "mixed"]:
+        digital_text = extract_text(pdf_path, page_num)
+        if len(digital_text) >= MIN_DIGITAL_CHARS:
+            logger.debug("Page %d: digital text sufficient (%d chars), skipping OCR", page_num, len(digital_text))
+            return digital_text, False
+        ocr_text = ocr_page(pdf_path, page_num)
+        logger.debug("Page %d: OCR returned %d chars", page_num, len(ocr_text))
+        combined = (digital_text + "\n\n[OCR supplement]\n" + ocr_text).strip() if digital_text else ocr_text
+        return combined, True
 
-    if typ == "gemischt":
-        digital_text = extract_text(pdf_path, seite_num)
-        ocr_text = ocr_seite(pdf_path, seite_num)
-        kombiniert = digital_text
-        if ocr_text:
-            kombiniert += "\n\n[OCR-Ergänzung]\n" + ocr_text
-        logger.debug("Seite %d: gemischt — %d digital + %d OCR Zeichen", seite_num, len(digital_text), len(ocr_text))
-        return kombiniert, True
-
-    return "", False  # leer
+    return "", False  # empty
 
 
-def run_pipeline(pdf_path: Path, schema: dict) -> ExtractionErgebnis:
+def run_pipeline(pdf_path: Path, schema: dict | None) -> ExtractionResult:
     if schema is None:
         schema = json.loads(DEFAULT_SCHEMA_PATH.read_text())
 
     request_id = str(uuid.uuid4())
-    seiten_info = inspect_pdf(pdf_path)
-    gesammelte_daten = {}
-    fehler = []
+    pages_info = inspect_pdf(pdf_path)
+    collected_data: dict = {}
+    errors: list[str] = []
     retry_count = 0
-    seiten_erfolgreich = []
-    seiten_fehlgeschlagen = []
+    pages_succeeded: list[int] = []
+    pages_failed: list[int] = []
 
-    for seite in seiten_info:
-        seite_num = seite["seite"]
-        gesamt_seiten = len(seiten_info)
-        versuch = 0
-        letzter_fehler = None
+    for page in pages_info:
+        page_num = page["page"]
+        total_pages = len(pages_info)
+        attempt = 0
+        last_error = None
 
-        while versuch < MAX_RETRIES:
+        while attempt < MAX_RETRIES:
             try:
-                text, ocr_verwendet = _hole_seitentext(pdf_path, seite)
-                prompt = baue_prompt(
+                text, ocr_used = _get_page_text(pdf_path, page)
+                prompt = build_prompt(
                     text=text,
                     schema=schema,
-                    seite_num=seite_num,
-                    gesamt_seiten=gesamt_seiten,
-                    letzter_fehler=letzter_fehler,
-                    ocr_verwendet=ocr_verwendet,
+                    page_num=page_num,
+                    total_pages=total_pages,
+                    last_error=last_error,
+                    ocr_used=ocr_used,
                 )
-                antwort = sende_anfrage(prompt)
-                daten = extrahiere_json(antwort)
-                gesammelte_daten.update(daten)
-                seiten_erfolgreich.append(seite_num)
-                retry_count += versuch
+                response = send_request(prompt, schema=schema)
+                data = json.loads(response)
+                collected_data.update(data)
+                pages_succeeded.append(page_num)
+                retry_count += attempt
                 break
 
             except Exception as e:
-                letzter_fehler = str(e)
-                versuch += 1
-                logger.warning("Seite %d, Versuch %d fehlgeschlagen: %s", seite_num, versuch, e)
-                if versuch == MAX_RETRIES:
-                    fehler.append(f"Seite {seite_num} nach {MAX_RETRIES} Versuchen fehlgeschlagen: {letzter_fehler}")
-                    seiten_fehlgeschlagen.append(seite_num)
+                last_error = str(e)
+                attempt += 1
+                logger.warning("Page %d, attempt %d failed: %s", page_num, attempt, e)
+                if attempt == MAX_RETRIES:
+                    errors.append(f"Page {page_num} failed after {MAX_RETRIES} attempts: {last_error}")
+                    pages_failed.append(page_num)
 
-    valid, validierungs_fehler = validiere_ergebnis(gesammelte_daten, schema)
-    fehler.extend(validierungs_fehler)
+    valid, validation_errors = validate_result(collected_data, schema)
+    errors.extend(validation_errors)
 
-    return ExtractionErgebnis(
+    return ExtractionResult(
         request_id=request_id,
-        seiten=len(seiten_info),
+        pages=len(pages_info),
         valid=valid,
-        daten=gesammelte_daten,
-        fehler=fehler,
+        data=collected_data,
+        errors=errors,
         retry_count=retry_count,
-        seiten_erfolgreich=seiten_erfolgreich,
-        seiten_fehlgeschlagen=seiten_fehlgeschlagen,
+        pages_succeeded=pages_succeeded,
+        pages_failed=pages_failed,
     )

@@ -1,71 +1,63 @@
 from pathlib import Path
 import pdfplumber
 
-
-# Schwellwerte für die Flächenklassifikation
-TEXT_SCHWELLE = 0.20   # >20% der Seite mit Text → text-relevant
-BILD_SCHWELLE = 0.15   # >15% der Seite mit Bildern → bild-relevant
+TEXT_THRESHOLD = 0.20
+IMAGE_THRESHOLD = 0.15
 
 
-def _text_abdeckung(seite) -> float:
-    """Anteil der Seitenfläche, der von Wort-Bounding-Boxes bedeckt wird."""
-    woerter = seite.extract_words()
-    if not woerter:
+def _text_coverage(page) -> float:
+    words = page.extract_words()
+    if not words:
         return 0.0
-    seiten_flaeche = seite.width * seite.height
-    if seiten_flaeche == 0:
+    page_area = page.width * page.height
+    if page_area == 0:
         return 0.0
-    text_flaeche = sum(
-        (w["x1"] - w["x0"]) * (w["bottom"] - w["top"]) for w in woerter
-    )
-    return min(text_flaeche / seiten_flaeche, 1.0)
+    text_area = sum((w["x1"] - w["x0"]) * (w["bottom"] - w["top"]) for w in words)
+    return min(text_area / page_area, 1.0)
 
 
-def _bild_abdeckung(seite) -> float:
-    """Anteil der Seitenfläche, der von Bild-Bounding-Boxes bedeckt wird."""
-    bilder = seite.images
-    if not bilder:
+def _image_coverage(page) -> float:
+    images = page.images
+    if not images:
         return 0.0
-    seiten_flaeche = seite.width * seite.height
-    if seiten_flaeche == 0:
+    page_area = page.width * page.height
+    if page_area == 0:
         return 0.0
-    bild_flaeche = sum(
-        abs(b["x1"] - b["x0"]) * abs(b["y1"] - b["y0"]) for b in bilder
-    )
-    return min(bild_flaeche / seiten_flaeche, 1.0)
+    image_area = sum(abs(img["x1"] - img["x0"]) * abs(img["y1"] - img["y0"]) for img in images)
+    return min(image_area / page_area, 1.0)
 
 
-def _klassifiziere(text_abdeckung: float, bild_abdeckung: float) -> str:
-    hat_text = text_abdeckung > TEXT_SCHWELLE
-    hat_bild = bild_abdeckung > BILD_SCHWELLE
+def _classify(text_coverage: float, image_coverage: float) -> str:
+    has_text = text_coverage > TEXT_THRESHOLD
+    has_image = image_coverage > IMAGE_THRESHOLD
 
-    if hat_text and hat_bild:
-        return "gemischt"
-    if hat_text:
+    if has_text and has_image:
+        return "mixed"
+    if has_text:
         return "text"
-    if hat_bild:
-        return "bild"
-    return "leer"
+    if has_image:
+        return "image"
+    return "empty"
 
 
 def inspect_pdf(pdf_path: Path) -> list[dict]:
-    ergebnisse = []
+    results = []
 
     with pdfplumber.open(pdf_path) as pdf:
-        for i, seite in enumerate(pdf.pages):
-            text_abdeckung = _text_abdeckung(seite)
-            bild_abdeckung = _bild_abdeckung(seite)
-            typ = _klassifiziere(text_abdeckung, bild_abdeckung)
+        for i, page in enumerate(pdf.pages):
+            text_cov = _text_coverage(page)
+            image_cov = _image_coverage(page)
+            page_type = _classify(text_cov, image_cov)
 
-            ergebnisse.append({
-                "seite": i,
-                "zeichen": len((seite.extract_text() or "").strip()),
-                "bilder": len(seite.images),
-                "breite": seite.width,
-                "hoehe": seite.height,
-                "text_abdeckung": round(text_abdeckung, 3),
-                "bild_abdeckung": round(bild_abdeckung, 3),
-                "typ": typ,
+            results.append({
+                "page": i,
+                "chars": len((page.extract_text() or "").strip()),
+                "images": len(page.images),
+                "width": page.width,
+                "height": page.height,
+                "text_coverage": round(text_cov, 3),
+                "image_coverage": round(image_cov, 3),
+                "page_type": page_type,
             })
 
-    return ergebnisse
+    return results

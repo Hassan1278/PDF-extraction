@@ -2,30 +2,34 @@ import io
 import logging
 from pathlib import Path
 
-import pytesseract
 from PIL import Image
 
-from src.doc_extract.pdf.render import render_seite
+from src.doc_extract.pdf.render import render_page
 
 logger = logging.getLogger(__name__)
 
-# Auf Windows: Pfad zu tesseract.exe anpassen falls nicht im PATH
-# pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+_reader = None
 
 
-def ocr_seite(pdf_path: Path, seite_num: int, sprachen: str = "deu+eng") -> str:
+def _get_reader():
+    """Lazy singleton — loads easyocr models once on first use."""
+    global _reader
+    if _reader is None:
+        import easyocr
+        _reader = easyocr.Reader(["de", "en"], verbose=False)
+    return _reader
+
+
+def ocr_page(pdf_path: Path, page_num: int) -> str:
     """
-    Rendert eine PDF-Seite und extrahiert Text via Tesseract OCR.
-    Gibt leeren String zurück wenn OCR fehlschlägt.
+    Renders a PDF page and extracts text via easyocr.
+    Returns an empty string if OCR fails.
     """
     try:
-        bild_bytes = render_seite(pdf_path, seite_num)
-        bild = Image.open(io.BytesIO(bild_bytes))
-        text = pytesseract.image_to_string(bild, lang=sprachen)
-        return text.strip()
-    except pytesseract.TesseractNotFoundError:
-        logger.error("Tesseract nicht gefunden. Bitte installieren: https://github.com/UB-Mannheim/tesseract/wiki")
-        raise
+        image_bytes = render_page(pdf_path, page_num)
+        image = Image.open(io.BytesIO(image_bytes))
+        results = _get_reader().readtext(image)
+        return " ".join(text for _, text, _ in results).strip()
     except Exception as e:
-        logger.warning("OCR auf Seite %d fehlgeschlagen: %s", seite_num, e)
+        logger.warning("OCR failed on page %d: %s", page_num, e)
         return ""

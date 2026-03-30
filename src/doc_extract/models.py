@@ -1,17 +1,19 @@
 from pydantic import BaseModel
 
-class SeiteInfo(BaseModel):
-    seite: int
-    zeichen: int
-    bilder: int
-    typ: str
 
-class ExtractionErgebnis(BaseModel):
+class PageInfo(BaseModel):
+    page: int
+    chars: int
+    images: int
+    page_type: str
+
+
+class ExtractionResult(BaseModel):
     request_id: str
-    seiten: int
+    pages: int
     valid: bool
-    daten: dict
-    fehler: list[str]
+    data: dict
+    errors: list[str]
     retry_count: int
-    seiten_erfolgreich: list[int]   # ← neu: z.B. [0, 1, 3]
-    seiten_fehlgeschlagen: list[int] # ← neu: z.B. [2, 4]
+    pages_succeeded: list[int]
+    pages_failed: list[int]
