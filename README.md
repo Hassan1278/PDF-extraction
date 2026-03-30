@@ -1,6 +1,6 @@
 # PDF Extraction Pipeline
 
-A schema-constrained document extraction pipeline that accepts a PDF and a JSON Schema and returns structured, validated JSON — powered by a local or hosted LLM.
+A schema-constrained document extraction pipeline that accepts a PDF and a JSON Schema and returns structured, validated JSON — powered by Groq's API (Llama 4 Scout).
 
 ## What it does
 
@@ -24,7 +24,7 @@ A schema-constrained document extraction pipeline that accepts a PDF and a JSON 
 | Tests | pytest |
 | Linting | ruff |
 
-> The inference client is written against the OpenAI-compatible API interface and can be pointed at a local vLLM server by changing the base URL and model name in `vllm_client.py`.
+> **Why Groq?** Running a local LLM requires significant GPU resources. Groq provides hardware-accelerated inference via API, giving comparable speed and quality without needing local hardware. The client is straightforward to swap — update the provider and model name in `groq_client.py` to point at any OpenAI-compatible endpoint (e.g. a self-hosted vLLM server).
 
 ## Setup
 
@@ -150,7 +150,7 @@ src/doc_extract/
 ├── prompts/
 │   └── builder.py       # prompt construction
 ├── inference/
-│   └── vllm_client.py   # LLM client (Groq / vLLM-compatible)
+│   └── groq_client.py   # LLM client (Groq API, Llama 4 Scout)
 └── postprocess/
     └── validation.py    # jsonschema validation
 ```

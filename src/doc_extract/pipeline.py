@@ -7,7 +7,7 @@ from src.doc_extract.pdf.inspect import inspect_pdf
 from src.doc_extract.pdf.text_extract import extract_text
 from src.doc_extract.pdf.ocr import ocr_page
 from src.doc_extract.prompts.builder import build_prompt
-from src.doc_extract.inference.vllm_client import send_request
+from src.doc_extract.inference.groq_client import send_request
 from src.doc_extract.models import ExtractionResult
 from src.doc_extract.postprocess.validation import validate_result
 from src.doc_extract.config import DEFAULT_SCHEMA_PATH
