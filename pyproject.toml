@@ -17,4 +17,6 @@ dependencies = [
     "ruff>=0.15.8",
     "typer>=0.24.1",
     "uvicorn>=0.42.0",
+    "pytesseract>=0.3.13",
+    "pillow>=11.0.0",
 ]
