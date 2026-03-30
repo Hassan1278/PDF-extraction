@@ -3,6 +3,7 @@ import pdfplumber
 
 TEXT_THRESHOLD = 0.20
 IMAGE_THRESHOLD = 0.15
+MIN_TEXT_CHARS = 50  # fallback: sparse layouts can have low coverage but real text
 
 
 def _text_coverage(page) -> float:
@@ -48,10 +49,16 @@ def inspect_pdf(pdf_path: Path) -> list[dict]:
             text_cov = _text_coverage(page)
             image_cov = _image_coverage(page)
             page_type = _classify(text_cov, image_cov)
+            chars = len((page.extract_text() or "").strip())
+
+            # Coverage underestimates sparse layouts (short invoices, forms).
+            # If pdfplumber found significant chars, treat as text regardless.
+            if page_type == "empty" and chars >= MIN_TEXT_CHARS:
+                page_type = "text"
 
             results.append({
                 "page": i,
-                "chars": len((page.extract_text() or "").strip()),
+                "chars": chars,
                 "images": len(page.images),
                 "width": page.width,
                 "height": page.height,

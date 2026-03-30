@@ -84,7 +84,11 @@ def run_pipeline(pdf_path: Path, schema: dict | None) -> ExtractionResult:
                 )
                 response = send_request(prompt, schema=schema)
                 data = json.loads(response)
-                collected_data.update(data)
+                # Only write a field if it hasn't been filled by an earlier page.
+                # Prevents later pages from overwriting already-extracted values with empty strings.
+                for k, v in data.items():
+                    if k not in collected_data or not collected_data[k]:
+                        collected_data[k] = v
                 pages_succeeded.append(page_num)
                 retry_count += attempt
                 break

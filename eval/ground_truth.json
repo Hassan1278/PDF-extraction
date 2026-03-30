@@ -1,0 +1,468 @@
+[
+    {
+        "id": "invoice_01",
+        "pdf": "sample_pdfs/invoice_01.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "Acme GmbH",
+            "recipient": "Beta Corp",
+            "date": "15.03.2024",
+            "invoice_number": "INV-2024-001",
+            "total": "1.250,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_02",
+        "pdf": "sample_pdfs/invoice_02.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "TechSolutions AG",
+            "recipient": "Global Retail GmbH",
+            "date": "02.04.2024",
+            "invoice_number": "INV-2024-002",
+            "total": "3.800,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_03",
+        "pdf": "sample_pdfs/invoice_03.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "DataWorks UG",
+            "recipient": "FinanceHub Ltd",
+            "date": "18.04.2024",
+            "invoice_number": "INV-2024-003",
+            "total": "650,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_04",
+        "pdf": "sample_pdfs/invoice_04.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "CloudPeak GmbH",
+            "recipient": "Stadtwerke Bonn",
+            "date": "05.05.2024",
+            "invoice_number": "INV-2024-004",
+            "total": "2.100,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_05",
+        "pdf": "sample_pdfs/invoice_05.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "DesignLab Studio",
+            "recipient": "Markus Bauer",
+            "date": "22.05.2024",
+            "invoice_number": "INV-2024-005",
+            "total": "480,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_06",
+        "pdf": "sample_pdfs/invoice_06.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "NetSecure GmbH",
+            "recipient": "MedTech AG",
+            "date": "10.06.2024",
+            "invoice_number": "INV-2024-006",
+            "total": "5.500,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_07",
+        "pdf": "sample_pdfs/invoice_07.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "PrintMaster KG",
+            "recipient": "Verlag Hoffmann",
+            "date": "28.06.2024",
+            "invoice_number": "INV-2024-007",
+            "total": "920,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_08",
+        "pdf": "sample_pdfs/invoice_08.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "LegalTech UG",
+            "recipient": "Kanzlei Schneider",
+            "date": "14.07.2024",
+            "invoice_number": "INV-2024-008",
+            "total": "1.800,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_09",
+        "pdf": "sample_pdfs/invoice_09.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "GreenEnergy GmbH",
+            "recipient": "Bauamt Hamburg",
+            "date": "31.07.2024",
+            "invoice_number": "INV-2024-009",
+            "total": "7.200,00 EUR"
+        }
+    },
+    {
+        "id": "invoice_10",
+        "pdf": "sample_pdfs/invoice_10.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "AutoServ AG",
+            "recipient": "Logistik Weber",
+            "date": "19.08.2024",
+            "invoice_number": "INV-2024-010",
+            "total": "340,00 EUR"
+        }
+    },
+    {
+        "id": "id_form_01",
+        "pdf": "sample_pdfs/id_form_01.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Maria Mustermann",
+            "date_of_birth": "12.05.1990",
+            "id_number": "DE123456789",
+            "nationality": "German"
+        }
+    },
+    {
+        "id": "id_form_02",
+        "pdf": "sample_pdfs/id_form_02.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Thomas Richter",
+            "date_of_birth": "03.11.1985",
+            "id_number": "DE987654321",
+            "nationality": "German"
+        }
+    },
+    {
+        "id": "id_form_03",
+        "pdf": "sample_pdfs/id_form_03.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Priya Sharma",
+            "date_of_birth": "27.08.1993",
+            "id_number": "IN456789012",
+            "nationality": "Indian"
+        }
+    },
+    {
+        "id": "id_form_04",
+        "pdf": "sample_pdfs/id_form_04.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Jean-Luc Moreau",
+            "date_of_birth": "15.02.1978",
+            "id_number": "FR234567890",
+            "nationality": "French"
+        }
+    },
+    {
+        "id": "id_form_05",
+        "pdf": "sample_pdfs/id_form_05.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Sofia Rossi",
+            "date_of_birth": "09.07.1995",
+            "id_number": "IT345678901",
+            "nationality": "Italian"
+        }
+    },
+    {
+        "id": "id_form_06",
+        "pdf": "sample_pdfs/id_form_06.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Ahmed Al-Farsi",
+            "date_of_birth": "21.12.1982",
+            "id_number": "AE567890123",
+            "nationality": "Emirati"
+        }
+    },
+    {
+        "id": "id_form_07",
+        "pdf": "sample_pdfs/id_form_07.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Emma Johnson",
+            "date_of_birth": "04.03.1999",
+            "id_number": "GB678901234",
+            "nationality": "British"
+        }
+    },
+    {
+        "id": "id_form_08",
+        "pdf": "sample_pdfs/id_form_08.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Carlos Fernandez",
+            "date_of_birth": "30.09.1976",
+            "id_number": "ES789012345",
+            "nationality": "Spanish"
+        }
+    },
+    {
+        "id": "id_form_09",
+        "pdf": "sample_pdfs/id_form_09.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Yuki Tanaka",
+            "date_of_birth": "17.06.1988",
+            "id_number": "JP890123456",
+            "nationality": "Japanese"
+        }
+    },
+    {
+        "id": "id_form_10",
+        "pdf": "sample_pdfs/id_form_10.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Anna Kowalski",
+            "date_of_birth": "25.01.1991",
+            "id_number": "PL901234567",
+            "nationality": "Polish"
+        }
+    },
+    {
+        "id": "contract_01",
+        "pdf": "sample_pdfs/contract_01.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "Acme GmbH",
+            "party_b": "Beta Corp",
+            "date": "01.01.2024",
+            "subject": "Software Development Services"
+        }
+    },
+    {
+        "id": "contract_02",
+        "pdf": "sample_pdfs/contract_02.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "TechSolutions AG",
+            "party_b": "RetailGroup GmbH",
+            "date": "15.01.2024",
+            "subject": "IT Infrastructure Maintenance"
+        }
+    },
+    {
+        "id": "contract_03",
+        "pdf": "sample_pdfs/contract_03.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "DataWorks UG",
+            "party_b": "FinanceHub Ltd",
+            "date": "01.02.2024",
+            "subject": "Data Analytics Consulting"
+        }
+    },
+    {
+        "id": "contract_04",
+        "pdf": "sample_pdfs/contract_04.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "CloudPeak GmbH",
+            "party_b": "Stadtwerke Bonn",
+            "date": "20.02.2024",
+            "subject": "Cloud Migration Project"
+        }
+    },
+    {
+        "id": "contract_05",
+        "pdf": "sample_pdfs/contract_05.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "NetSecure GmbH",
+            "party_b": "MedTech AG",
+            "date": "05.03.2024",
+            "subject": "Cybersecurity Assessment"
+        }
+    },
+    {
+        "id": "contract_06",
+        "pdf": "sample_pdfs/contract_06.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "LegalTech UG",
+            "party_b": "Kanzlei Schneider",
+            "date": "18.03.2024",
+            "subject": "Legal Software Licensing"
+        }
+    },
+    {
+        "id": "contract_07",
+        "pdf": "sample_pdfs/contract_07.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "GreenEnergy GmbH",
+            "party_b": "Bauamt Hamburg",
+            "date": "02.04.2024",
+            "subject": "Solar Installation Contract"
+        }
+    },
+    {
+        "id": "contract_08",
+        "pdf": "sample_pdfs/contract_08.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "DesignLab Studio",
+            "party_b": "Startup Nexus UG",
+            "date": "22.04.2024",
+            "subject": "Brand Identity Design"
+        }
+    },
+    {
+        "id": "contract_09",
+        "pdf": "sample_pdfs/contract_09.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "AutoServ AG",
+            "party_b": "Logistik Weber",
+            "date": "10.05.2024",
+            "subject": "Fleet Maintenance Agreement"
+        }
+    },
+    {
+        "id": "contract_10",
+        "pdf": "sample_pdfs/contract_10.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "PrintMaster KG",
+            "party_b": "Verlag Hoffmann",
+            "date": "28.05.2024",
+            "subject": "Print Services Framework Contract"
+        }
+    },
+    {
+        "id": "varied_01",
+        "pdf": "sample_pdfs/varied_01.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "Orbit Digital GmbH",
+            "recipient": "Nexus Retail AG",
+            "date": "07.10.2024",
+            "invoice_number": "ORB-2024-088",
+            "total": "4.350,00 EUR"
+        },
+        "note": "prose_invoice"
+    },
+    {
+        "id": "varied_02",
+        "pdf": "sample_pdfs/varied_02.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "Helix Consulting KG",
+            "recipient": "Polaris Bank GmbH",
+            "date": "23.10.2024",
+            "invoice_number": "HLX-2024-044",
+            "total": "9.800,00 EUR"
+        },
+        "note": "prose_invoice"
+    },
+    {
+        "id": "varied_03",
+        "pdf": "sample_pdfs/varied_03.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "Vega Systems UG",
+            "recipient": "Draco Logistics GmbH",
+            "date": "11.11.2024",
+            "invoice_number": "VEG-2024-007",
+            "total": "1.640,00 EUR"
+        },
+        "note": "ambiguous_invoice"
+    },
+    {
+        "id": "varied_04",
+        "pdf": "sample_pdfs/varied_04.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "Sirius Software AG",
+            "recipient": "Altair Media GmbH",
+            "date": "30.11.2024",
+            "invoice_number": "SRS-2024-019",
+            "total": "2.750,00 EUR"
+        },
+        "note": "reversed_invoice"
+    },
+    {
+        "id": "varied_05",
+        "pdf": "sample_pdfs/varied_05.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "Pulsar Tech GmbH",
+            "recipient": "Rigel Pharma AG",
+            "date": "05.12.2024",
+            "invoice_number": "PSR-2024-201",
+            "total": "6.100,00 EUR"
+        },
+        "note": "noisy_invoice"
+    },
+    {
+        "id": "varied_06",
+        "pdf": "sample_pdfs/varied_06.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Lena Brandt",
+            "date_of_birth": "14.09.1987",
+            "id_number": "DE556677889",
+            "nationality": "German"
+        },
+        "note": "unusual_id"
+    },
+    {
+        "id": "varied_07",
+        "pdf": "sample_pdfs/varied_07.pdf",
+        "schema": "schemas/id_form_schema.json",
+        "expected": {
+            "full_name": "Marco Vitale",
+            "date_of_birth": "02.04.1980",
+            "id_number": "IT112233445",
+            "nationality": "Italian"
+        },
+        "note": "split_name_id"
+    },
+    {
+        "id": "varied_08",
+        "pdf": "sample_pdfs/varied_08.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "Zenith Labs GmbH",
+            "party_b": "Aurora Ventures AG",
+            "date": "01.03.2024",
+            "subject": "Research and Development Partnership"
+        },
+        "note": "multipage_contract"
+    },
+    {
+        "id": "varied_09",
+        "pdf": "sample_pdfs/varied_09.pdf",
+        "schema": "schemas/contract_schema.json",
+        "expected": {
+            "party_a": "Luminar GmbH",
+            "party_b": "Crestview Capital AG",
+            "date": "15.06.2024",
+            "subject": "Financial Advisory Services"
+        },
+        "note": "prose_contract"
+    },
+    {
+        "id": "varied_10",
+        "pdf": "sample_pdfs/varied_10.pdf",
+        "schema": "schemas/invoice_schema.json",
+        "expected": {
+            "sender": "Meridian Consulting AG",
+            "recipient": "Stratos Holding GmbH",
+            "date": "18.12.2024",
+            "invoice_number": "MRD-2024-055",
+            "total": "3.200,00 EUR"
+        },
+        "note": "footer_invoice"
+    }
+]

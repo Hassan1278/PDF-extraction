@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "properties": {
+        "sender": {
+            "type": "string",
+            "description": "Company or person issuing the invoice"
+        },
+        "recipient": {
+            "type": "string",
+            "description": "Company or person receiving the invoice"
+        },
+        "date": {
+            "type": "string",
+            "description": "Invoice date in DD.MM.YYYY format"
+        },
+        "invoice_number": {
+            "type": "string",
+            "description": "Invoice reference number"
+        },
+        "total": {
+            "type": "string",
+            "description": "Total amount including currency symbol"
+        }
+    },
+    "required": ["sender", "recipient", "date", "invoice_number", "total"]
+}

@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "properties": {
+        "party_a": {
+            "type": "string",
+            "description": "First party named in the contract"
+        },
+        "party_b": {
+            "type": "string",
+            "description": "Second party named in the contract"
+        },
+        "date": {
+            "type": "string",
+            "description": "Contract date in DD.MM.YYYY format"
+        },
+        "subject": {
+            "type": "string",
+            "description": "Subject or title of the contract"
+        },
+        "summary": {
+            "type": "string",
+            "description": "Brief summary of the contract in 1-2 sentences"
+        }
+    },
+    "required": ["party_a", "party_b", "date", "subject"]
+}

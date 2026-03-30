@@ -1,6 +1,17 @@
+# Environment
 .env
+.venv/
+
+# Python
 __pycache__/
+**/__pycache__/
 *.pyc
-output.png
+*.pyo
+
+# Generated PDFs (regenerate with: python scripts/generate_sample_pdfs.py)
 sample_pdfs/
-.venv
+
+# Misc
+output.png
+*.tmp
+.claude
