@@ -5,7 +5,7 @@ Build a pipeline that accepts:
 1. a PDF
 2. a JSON Schema
 
-and returns schema-valid extracted JSON using a local open-source model served through vLLM.
+and returns schema-valid extracted JSON using Groq's API (Llama 4 Scout).
 
 ## Core rules
 - Explore first, then plan, then code.

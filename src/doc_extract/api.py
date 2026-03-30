@@ -20,7 +20,10 @@ async def extract(
         tmp.write(await pdf.read())
         tmp_path = Path(tmp.name)
 
-    result = run_pipeline(tmp_path, schema)
+    try:
+        result = run_pipeline(tmp_path, schema)
+    finally:
+        tmp_path.unlink(missing_ok=True)
 
     return {
         "valid": result.valid,
