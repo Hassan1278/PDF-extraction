@@ -27,8 +27,11 @@ def _normalize_inplace(node: dict) -> None:
         node["required"] = list(props.keys())
         for prop in props.values():
             _normalize_inplace(prop)
-    if node.get("type") == "array":
+    elif node.get("type") == "array":
         _normalize_inplace(node.get("items", {}))
+    elif isinstance(node.get("type"), str) and node["type"] != "null":
+        # Allow null so the model can output null when a field is absent on a page
+        node["type"] = [node["type"], "null"]
 
 
 def send_request(prompt: str, schema: dict) -> str:
